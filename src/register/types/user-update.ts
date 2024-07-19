@@ -1,5 +1,5 @@
 export class UserUpdate {
-    name?:string
-    salary?:number
-    position?:string
+    readonly name?:string
+    readonly salary?:number
+    readonly position?:string
 }

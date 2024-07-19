@@ -1,6 +1,6 @@
 export class UserCreate {
-    id:string
-    name:string
-    salary:number
-    position:string
+   readonly id:number
+   readonly name:string
+   readonly salary:number
+   readonly position:string
 }
