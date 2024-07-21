@@ -37,8 +37,8 @@ Este é um projeto em NestJS desenvolvido como base para exercícios e consulta.
 1. **Clone o repositório:**
 
    ```bash
-   git@github.com:RobsonFe/CRUD-NestJS.git
-   cd crud
+   git@github.com:RobsonFe/register-api.git
+   cd register
    ```
 
 2. **Instale as dependências:**
@@ -54,6 +54,17 @@ Este é um projeto em NestJS desenvolvido como base para exercícios e consulta.
    ```bash
    yarn
    ```
+
+   Utilizando pnpm **(Recomendo)**:
+   Instale o pacote `pnpm`
+
+```bash
+npm install -g pnpm
+```
+
+```bash
+pnpm install
+```
 
 ## Configuração
 
