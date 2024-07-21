@@ -1,6 +1,5 @@
 import { UserCreate } from './../types/user-create';
 import { Injectable } from '@nestjs/common';
-import { UserUpdate } from '../types/user-update';
 
 @Injectable()
 export class RegisterService {

@@ -1,10 +1,3 @@
-import { IsNumber, IsString } from 'class-validator';
-
-export class UserUpdate {
-  @IsString()
-  readonly name?: string;
-  @IsNumber()
-  readonly salary?: number;
-  @IsString()
-  readonly position?: string;
-}
+import { PartialType } from '@nestjs/mapped-types';
+import { UserCreate } from './user-create';
+export class UserUpdate extends PartialType(UserCreate) {}

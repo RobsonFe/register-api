@@ -22,7 +22,7 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-# Projeto NestJS com Mongodb 
+# Projeto NestJS com Mongodb
 
 Este é um projeto em NestJS desenvolvido como base para exercícios e consulta. O projeto implementa operações básicas CRUD (Create, Read, Update, Delete) para gerenciar uma entidade `User`, incluindo listagem, busca por ID, salvamento, atualização e exclusão de funcionários.
 
@@ -58,8 +58,8 @@ Este é um projeto em NestJS desenvolvido como base para exercícios e consulta.
 ## Configuração
 
 - O projeto utiliza o NestJS com TypeScript para facilitar o desenvolvimento e manutenção.
-- O serviço `PeopleService` gerencia a entidade `Person`, com operações CRUD implementadas.
-- O controlador `PeopleController` define rotas para acessar e manipular os dados de pessoas.
+- O serviço `registerService` gerencia a entidade `Register`, com operações CRUD implementadas.
+- O controlador `registerController` define rotas para acessar e manipular os dados de pessoas.
 
 ## Uso
 
@@ -79,58 +79,128 @@ Isso iniciará o servidor localmente em `http://localhost:3000`.
 
 ### Rotas Disponíveis
 
-- **Listar todas as pessoas:**
+- **Listar todas os usuarios:**
 
   ```
-  GET http://localhost:3000/register/list
+  GET http://localhost:3000/register/api/v1/list
   ```
 
-- **Buscar pessoa por ID:**
+- **Buscar usuario por ID:**
 
   ```
-  GET http://localhost:3000/register/search/:id
+  GET http://localhost:3000/register/api/v1/search/1
   ```
 
-- **Salvar uma nova pessoa:**
+- **Criar usuario:**
 
   ```
-  POST http://localhost:3000/register/save
+  POST http://localhost:3000/register/api/v1/save
   Body: { "id": 1, "name": "Rodrigo", "salary": 3000, "position": "developer" }
   ```
 
-- **Atualizar pessoa por ID:**
+- **Atualizar usuarios por ID:**
 
   ```
-  PUT http://localhost:3000/register/update/:id
+  PUT http://localhost:3000/register/api/v1/update/1
   Body: { "name": "New name", "salary": 5000, "position": "full stack" }
   ```
 
-- **Excluir pessoa por ID:**
+- **Excluir usuario por ID:**
 
   ```
-  DELETE http://localhost:3000/register/delete/:id
+  DELETE http://localhost:3000/register/api/v1/delete/1
   ```
 
 ### Exemplo de Uso
 
 ```bash
 # Salvar novo funcionário
-curl -X POST -H "Content-Type: application/json" -d '{ "id": 1, "name": "João", "salary": 3000, "position": "developer" }' http://localhost:3000/register/save
+curl -X POST -H "Content-Type: application/json" -d '{ "id": 1, "name": "João Silva", "salary": 3000, "position": "developer" }' http://localhost:3000/register/api/v1/save
 
 # Listar todos os funcionários
-curl http://localhost:3000/register/list
+curl http://localhost:3000/register/api/v1/list
 
 # Buscar funcionários por ID
-curl http://localhost:3000/register/search/1
+curl http://localhost:3000/register/api/v1/search/1
 
 # Atualizar funcionários por ID
-curl -X PUT -H "Content-Type: application/json" -d '{ "name": "João da Silva","salary": 5000, "position": "full stack" }' http://localhost:3000/register/update/1
+curl -X PUT -H "Content-Type: application/json" -d '{ "name": "João da Silva","salary": 5000, "position": "full stack" }' http://localhost:3000/register/api/v1/update/1
 
 # Deletar funcionários por ID
-curl -X DELETE http://localhost:3000/register/delete/1
+curl -X DELETE http://localhost:3000/register/api/v1/delete/1
 ```
 
 <hr>
+
+## Proteção e Validação de Dados
+
+Todos os dados foram tipados e validados utilizando algumas bibliotecas para auxiliar no trabalho do `NestJS`.
+
+Instale
+
+```bash
+npm install class-transformer
+```
+
+---
+
+```bash
+npm install class-validator
+```
+
+---
+
+```bash
+npm install @nestjs/mapped-types
+```
+
+Aplicando as Validações
+
+- O `class-validator` e o `class-transformer` ajuda no auxilio das tipagens dos dados na hora de passar os arquivos do DTO para o `json` na requisição, mostrando qual o tipo da variavél.
+
+```typescript
+import { IsNumber, IsString } from 'class-validator';
+
+export class UserCreate {
+  readonly id: number;
+  @IsString()
+  readonly name: string;
+  @IsNumber()
+  readonly salary: number;
+  @IsString()
+  readonly position: string;
+}
+```
+
+- Já na classe de atualização onde passar os parametros do `update`, utilizamos parcialmente os mesmos dados do `user-create` fazendo com que utilizando como herança os mesmos recursos, só que parcialmente, porque voce pode utilizar todos os dados ou não, um exemplo é o `id`.
+
+```typescript
+import { PartialType } from '@nestjs/mapped-types';
+import { UserCreate } from './user-create';
+export class UserUpdate extends PartialType(UserCreate) {}
+// não precisa colocar mais nada que os dados são abstraidos.
+```
+
+- Essa validação de dados auxilia na proteção de requisições e validação dos dados, porque se o DTO for do tipo number, mesmo que no `json` passe string, ele irá tipar automaticamente pada `number`.
+
+```typescript
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { ValidationPipe } from '@nestjs/common';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true, //Anula corpos na requisição que é indevido
+      forbidNonWhitelisted: true, // recusa requisições indevidas/400 bad request
+      transform: true, // valida a tipagem da requisição
+    }),
+  ); // Validação de dados
+  await app.listen(3000);
+}
+bootstrap();
+```
 
 ## Licença
 

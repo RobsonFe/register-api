@@ -17,8 +17,8 @@ export class RegisterController {
 
   @Get('search/:id')
   @HttpCode(HttpStatus.OK)
-  findById(@Param('id') id: string) {
-    return this.registerService.findById(Number(id));
+  findById(@Param('id') id: number) {
+    return this.registerService.findById(id);
   }
 
   @Get('list')
@@ -35,13 +35,13 @@ export class RegisterController {
 
   @Put('update/:id')
   @HttpCode(HttpStatus.OK)
-  update(@Param('id') id: string, @Body() body) {
-    return this.registerService.update(Number(id), body);
+  update(@Param('id') id: number, @Body() body) {
+    return this.registerService.update(id, body);
   }
 
   @Delete('delete/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  delete(@Param('id') id: string) {
-    return this.registerService.delete(Number(id));
+  delete(@Param('id') id: number) {
+    return this.registerService.delete(id);
   }
 }
