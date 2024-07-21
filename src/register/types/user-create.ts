@@ -1,6 +1,11 @@
+import { IsNumber, IsString } from 'class-validator';
+
 export class UserCreate {
-   readonly id:number
-   readonly name:string
-   readonly salary:number
-   readonly position:string
+  readonly id: number;
+  @IsString()
+  readonly name: string;
+  @IsNumber()
+  readonly salary: number;
+  @IsString()
+  readonly position: string;
 }

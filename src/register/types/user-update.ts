@@ -1,5 +1,10 @@
+import { IsNumber, IsString } from 'class-validator';
+
 export class UserUpdate {
-    readonly name?:string
-    readonly salary?:number
-    readonly position?:string
+  @IsString()
+  readonly name?: string;
+  @IsNumber()
+  readonly salary?: number;
+  @IsString()
+  readonly position?: string;
 }
